@@ -65,7 +65,7 @@ public class Maze {
       }
       s = s + " |\n+";
       if (j < vert - 1) {
-        // Print a row of horizontal walls and wall corners.
+   
         for (i = 0; i < horiz; i++) {
           if (hWalls[i][j]) {
             s = s + "-+";
@@ -159,7 +159,7 @@ public class Maze {
       }
     }
 
-    // Visit the cell below?
+  
     if ((fromWhere != FROMBELOW) && !horizontalWall(x, y)) {
       if (cellVisited[x][y + 1]) {
         cycleDetected = true;
