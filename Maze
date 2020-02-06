@@ -1,0 +1,229 @@
+package maze;
+import java.util.*;
+
+
+public class Maze {
+
+  protected int horiz;
+  protected int vert;
+  protected boolean[][] hWalls;
+  protected boolean[][] vWalls;
+  private static Random random;
+  private static final int STARTHERE = 0;
+  private static final int FROMLEFT = 1;
+  private static final int FROMRIGHT = 2;
+  private static final int FROMABOVE = 3;
+  private static final int FROMBELOW = 4;
+
+
+  public Maze(int horizontalSize, int verticalSize) {
+    int i, j;
+
+    horiz = horizontalSize;
+    vert = verticalSize;
+    if ((horiz < 1) || (vert < 1) || ((horiz == 1) && (vert == 1))) {
+      return;                                  
+    }
+
+    if (vert > 1) {
+      hWalls = new boolean[horiz][vert - 1];
+      for (j = 0; j < vert - 1; j++) {
+        for (i = 0; i < horiz; i++) {
+          hWalls[i][j] = true;
+        }
+      }
+    }
+    if (horiz > 1) {
+      vWalls = new boolean[horiz - 1][vert];
+      for (i = 0; i < horiz - 1; i++) {
+        for (j = 0; j < vert; j++) {
+          vWalls[i][j] = true;
+        }
+      }
+    }
+
+  }
+
+
+  public String toString() {
+    int i, j;
+    String s = "";
+
+    // Print the top exterior wall.
+    for (i = 0; i < horiz; i++) {
+      s = s + "--";
+    }
+    s = s + "-\n|";
+
+ 
+    for (j = 0; j < vert; j++) {
+      // Print a row of cells and vertical walls.
+      for (i = 0; i < horiz - 1; i++) {
+        if (vWalls[i][j]) {
+          s = s + " |";
+        } else {
+          s = s + "  ";
+        }
+      }
+      s = s + " |\n+";
+      if (j < vert - 1) {
+        // Print a row of horizontal walls and wall corners.
+        for (i = 0; i < horiz; i++) {
+          if (hWalls[i][j]) {
+            s = s + "-+";
+          } else {
+            s = s + " +";
+          }
+        }
+        s = s + "\n|";
+      }
+    }
+
+    // Print the bottom exterior wall.  (Note that the first corner has
+    // already been printed.)
+    for (i = 0; i < horiz; i++) {
+      s = s + "--";
+    }
+    return s + "\n";
+  }
+
+ 
+  public boolean horizontalWall(int x, int y) {
+    if ((x < 0) || (y < 0) || (x > horiz - 1) || (y > vert - 2)) {
+      return true;
+    }
+    return hWalls[x][y];
+  }
+
+
+  public boolean verticalWall(int x, int y) {
+    if ((x < 0) || (y < 0) || (x > horiz - 2) || (y > vert - 1)) {
+      return true;
+    }
+    return vWalls[x][y];
+  }
+
+ 
+  private static int randInt(int choices) {
+    if (random == null) {      
+      random = new Random();       
+    }
+    int r = random.nextInt() % choices;      
+    if (r < 0) {
+      r = -r;                                       
+    }
+    return r;
+  }
+
+  protected void diagnose() {
+    if ((horiz < 1) || (vert < 1) || ((horiz == 1) && (vert == 1))) {
+      return;                                  
+    }
+
+    boolean mazeFine = true;
+
+   
+    boolean[][] cellVisited = new boolean[horiz][vert];
+    // Do a depth-first traversal.
+    if (depthFirstSearch(0, 0, STARTHERE, cellVisited)) {
+      System.out.println("Your maze has a cycle.");
+      mazeFine = false;
+    }
+
+  outerLoop:
+    for (int j = 0; j < vert; j++) {
+      for (int i = 0; i < horiz; i++) {
+        if (!cellVisited[i][j]) {
+          System.out.println("Not every cell in your maze is reachable from " +
+                             "every other cell.");
+          mazeFine = false;
+          break outerLoop;
+        }
+      }
+    }
+
+    if (mazeFine) {
+      System.out.println("What a fine maze you've created!");
+    }
+  }
+
+  
+  protected boolean depthFirstSearch(int x, int y, int fromWhere,
+                                     boolean[][] cellVisited) {
+    boolean cycleDetected = false;
+    cellVisited[x][y] = true;
+
+    // Visit the cell to the right?
+    if ((fromWhere != FROMRIGHT) && !verticalWall(x, y)) {
+      if (cellVisited[x + 1][y]) {
+        cycleDetected = true;
+      } else {
+        cycleDetected = depthFirstSearch(x + 1, y, FROMLEFT, cellVisited) ||
+                        cycleDetected;
+      }
+    }
+
+    // Visit the cell below?
+    if ((fromWhere != FROMBELOW) && !horizontalWall(x, y)) {
+      if (cellVisited[x][y + 1]) {
+        cycleDetected = true;
+      } else {
+        cycleDetected = depthFirstSearch(x, y + 1, FROMABOVE, cellVisited) ||
+                        cycleDetected;
+      }
+    }
+
+    
+    if ((fromWhere != FROMLEFT) && !verticalWall(x - 1, y)) {
+      if (cellVisited[x - 1][y]) {
+        cycleDetected = true;
+      } else {
+        cycleDetected = depthFirstSearch(x - 1, y, FROMRIGHT, cellVisited) ||
+                        cycleDetected;
+      }
+    }
+
+    // Visit the cell above?
+    if ((fromWhere != FROMABOVE) && !horizontalWall(x, y - 1)) {
+      if (cellVisited[x][y - 1]) {
+        cycleDetected = true;
+      } else {
+        cycleDetected = depthFirstSearch(x, y - 1, FROMBELOW, cellVisited) ||
+                        cycleDetected;
+      }
+    }
+
+    return cycleDetected;
+  }
+
+  
+  public static void main(String[] args) {
+    int x = 39;
+    int y = 15;
+
+
+
+    if (args.length > 0) {
+      try {
+        x = Integer.parseInt(args[0]);
+      }
+      catch (NumberFormatException e) {
+        System.out.println("First argument to Simulation is not an number.");
+      }
+    }
+
+    if (args.length > 1) {
+      try {
+        y = Integer.parseInt(args[1]);
+      }
+      catch (NumberFormatException e) {
+        System.out.println("Second argument to Simulation is not an number.");
+      }
+    }
+
+    Maze maze = new Maze(x, y);
+    System.out.print(maze);
+    maze.diagnose();
+  }
+
+}
