@@ -1,7 +1,6 @@
 package maze;
 import java.util.*;
 
-
 public class Maze {
 
   protected int horiz;
@@ -49,7 +48,6 @@ public class Maze {
     int i, j;
     String s = "";
 
-    // Print the top exterior wall.
     for (i = 0; i < horiz; i++) {
       s = s + "--";
     }
@@ -79,8 +77,6 @@ public class Maze {
       }
     }
 
-    // Print the bottom exterior wall.  (Note that the first corner has
-    // already been printed.)
     for (i = 0; i < horiz; i++) {
       s = s + "--";
     }
@@ -183,7 +179,6 @@ public class Maze {
       }
     }
 
-    // Visit the cell above?
     if ((fromWhere != FROMABOVE) && !horizontalWall(x, y - 1)) {
       if (cellVisited[x][y - 1]) {
         cycleDetected = true;
