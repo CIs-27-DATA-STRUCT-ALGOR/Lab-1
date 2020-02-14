@@ -1,4 +1,3 @@
-// created by Arkan tesfay Mekonen
 
 import org.w3c.dom.Node;
 
