@@ -1,0 +1,148 @@
+// created by Arkan tesfay Mekonen
+
+public class Maze
+{
+    private int[][] d2;
+    private int[] d1;
+    int count,n,m;
+
+    public Maze(int a, int b)//constructs a maze a times b
+    {
+        n=a;
+        m=b;
+        d2=new int[n][m];
+        d1=new int[n*m];
+        int num=0;
+        count=n*m;
+        for (int i=0;i<n;i++)
+        {
+            for (int j=0;j<m;j++)
+            {
+                d2[i][j]=num;
+                num++;
+
+            }
+        }
+        for (int i=0;i<(n*m);i++)
+        {
+            d1[i]=i;
+        }
+    }
+    public int count()//count the connected unions
+    {
+        return count;
+    }
+    public boolean connected(int p,int q)//check if p and q are connected
+    {
+        return find(p)==find(q);
+    }
+    public int find(int p)//finds p
+    {
+        while (p !=d1[p])
+        {
+            p=d1[p];
+        }
+        return p;
+    }
+    public void union(int p,int q)// unionizes the to number
+    {
+        int i=find(p);
+        int j=find(q);
+        if (i==j)
+
+            return;
+            d1[i]=j;
+            count--;
+
+    }
+    // check if the given  column and row are inBound
+    public boolean isInBound(int i,int j)
+    {
+        if ((i>=0) && (i<n) && ((j>=0) && (j<m)))
+        {
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    public boolean test()//test if all the numbers are connected
+    {
+        for (int i=0;i<n*m;i++)
+        {
+            for (int j=0;j<n*m;j++)
+            {
+                if (connected(d1[i],d1[j])==false)
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+    // generates random number to check if it's in the bound
+    public void  random()
+    {
+        int num,lim,row=0,col=0;
+        boolean bool=false;
+        lim=n*m-1;
+        while (bool==false)
+        {
+            num=(int)(Math.random()*lim);
+            for (int i=0;i<n;i++)
+            {
+                for (int j=0;j<m;j++)
+                {
+                    if (d2[i][j]==num)
+                    {
+                        row=i;
+                        col=j;
+                    }
+                }
+            }
+            if (isInBound(row,col-1)){
+                int x=row*m+col;
+                int y=row*m+(col-1);
+                if (connected(x,y)==false)
+                {
+                    union(x,y);
+                    System.out.println("Connected: "+d2[row][col]+ " "+ d2[row][col-1]);
+                }
+            }
+            if (isInBound(row,col+1)){
+                int x=row*m+col;
+                int y=row*m+(col+1);
+                if (connected(x,y))
+                {
+                    union(x,y);
+                    System.out.println("Connected: "+d2[row][col]+ " "+ d2[row][col+1]);
+                }
+            }
+
+            if (isInBound(row-1,col)){
+                int x=row*m+col;
+                int y=(row-1)*m+col;
+                if (connected(x,y)==false)
+                {
+                    union(x,y);
+                    System.out.println("Connected: "+d2[row][col]+ " "+ d2[row-1][col]);
+                }
+            }
+            if (isInBound(row+1,col)){
+                int x=row*m+col;
+                int y=(row+1)*m+col;
+                if (connected(x,y))
+                {
+                    union(x,y);
+                    System.out.println("Connected: "+d2[row][col]+ " "+ d2[row+1][col]);
+                }
+            }
+            bool=test();
+
+
+        }
+    }
+
+
+
+}
