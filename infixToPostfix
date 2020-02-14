@@ -1,89 +1,59 @@
-import java.util.Stack; // Note that here we use Stack class for Stack operations
+import java.util.Stack;
 
-class ArithmeticExpressionEvaluator {
-    public static void main(String[] args) { //driver main
+public class ArithmeticExpressionEvaluator {
 
-        String exp = "a+b*(c^d-e)^(f+g*h)-i";
-
-        System.out.println(infixToPostfix(exp));
-
-    }
-
-    static int EvaluatePostfix(char ch) { //expression evaluator
-        switch (ch) {
+    static int EvaluatePostfix(char ch) {
+        switch (ch){
             case '+':
             case '-':
                 return 1;
-
             case '*':
             case '/':
                 return 2;
-
             case '^':
                 return 3;
         }
         return -1;
     }
 
-    static String infixToPostfix(String exp) { //converter
+    static String infixToPostFix(String expression){
 
-        String result = new String(""); // initialize empty String for result
+        String result = new String("");
 
-        Stack<Character> stack = new Stack<>(); // initializing empty stack
+        Stack<Character> stack = new Stack<>();
 
-        for (int i = 0; i < exp.length(); ++i) {
+        for (int i = 0; i <expression.length() ; i++) {
+            char ch = expression.charAt(i);
 
-            char ch = exp.charAt(i);
+            if(EvaluatePostfix(ch)>0) {
 
-            if (Character.isLetterOrDigit(ch)) { // If the scanned character is an operand
+                while(!stack.isEmpty() && EvaluatePostfix(stack.peek())>=EvaluatePostfix(ch)){
+                    result += stack.pop();
+                }
 
+                stack.push(ch);
+
+            } else if(ch == ')') {
+                char x = stack.pop();
+
+                while(x !='(') {
+                    result += x;
+                    x = stack.pop();
+                }
+            } else if(ch =='(') {
+                stack.push(ch);
+            } else {
                 result += ch;
-
-            } else if (ch == '(') {
-
-                stack.push(ch);
-
-            } else if (ch == ')') {
-
-                while (!stack.isEmpty() && stack.peek() != '(') { //while the stack is not empty and
-                    //its first element is not a "("
-
-                    result += stack.pop();
-
-                    if (!stack.isEmpty() && stack.peek() != '(') {
-
-                        return "Invalid Expression"; // invalid expression
-
-                    } else {
-                        stack.pop();
-                    }
-                }
-
-            } else { // an operator is encountered
-
-                while (!stack.isEmpty() && EvaluatePostfix(ch) <= EvaluatePostfix(stack.peek())) {
-
-                    result += stack.pop();
-
-                }
-
-                stack.push(ch);
-
             }
-
         }
-
-        while (!stack.isEmpty()) { // pop all the operators from the stack
-
-            if (stack.peek() == '(') {
-                return "Invalid Expression";
-            }
-
+        for (int i = 0; i <=stack.size() ; i++) {
             result += stack.pop();
-
         }
-
         return result;
-
     }
-}
+
+    public static void main(String[] args) {
+        String exp = "A+B*(C^D-E)";
+        System.out.println("Infix Expression: " + exp);
+        System.out.println("Postfix Expression: " + infixToPostFix(exp));
+    }
