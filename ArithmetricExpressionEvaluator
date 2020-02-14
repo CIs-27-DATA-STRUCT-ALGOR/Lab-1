@@ -1,0 +1,113 @@
+// created by Arkan tesfay Mekonen
+import java.util.Scanner;
+        import java.util.Stack;
+// ArithmetricExpressionEvaluator class
+ class ArithmetricExpressionEvaluator {
+    static private String expression; // variable for holding the expression
+    private Stack<Character> stack = new Stack<Character>();//stack for storing and pushing  the expression
+    // constructor
+    public ArithmetricExpressionEvaluator() {
+    }
+    //converts infix to postfix expression
+    public String infixToPostfix(String infixExpression) {
+        expression=infixExpression;//set the input to the expression
+        String postfixString ="";//the return value
+
+        for (int index = 0; index < expression.length(); ++index) {//loop through the expression
+            char value = expression.charAt(index);
+            if (value == '(') {// push the operators to the stack if there is left (
+                stack.push('(');
+            } else if (value == ')') {// pop the operators from the stack and compute if there is right )
+                Character oper = stack.peek();
+
+                while (!(oper.equals('(')) && !(stack.isEmpty())) {
+                    stack.pop();
+                    postfixString += oper.charValue();
+                    if (!stack.isEmpty())
+                        oper = stack.peek();
+                }
+                stack.pop();
+            } else if (value == '+' || value == '-') {
+                if (stack.isEmpty()) {
+                    stack.push(value);
+                } else {
+                    Character oper = stack.peek();
+                    while (!(stack.isEmpty() || oper.equals(('(')) || oper.equals((')')))) {
+                        oper = stack.pop();
+                        postfixString += oper.charValue();
+                    }
+                    stack.push(value);
+                }
+            } else if (value == '*' || value == '/') {
+                if (stack.isEmpty()) {
+                    stack.push(value);
+                } else {
+                    Character oper = stack.peek();
+                    // while condition updated
+                    while (!oper.equals(('(')) && !oper.equals(('+')) && !oper.equals(('-')) && !stack.isEmpty()) {
+                        oper = stack.pop(); // Code Updated
+                        postfixString += oper.charValue();
+                    }
+                    stack.push(value);
+                }
+            } else {
+                postfixString += value;// add the values to the postfixString
+            }
+        }
+
+        while (!stack.isEmpty()) {//check if the stack is empty if not keep poping the operators
+            Character oper = stack.peek();
+            if (!oper.equals(('('))) {
+                stack.pop();
+                postfixString += oper.charValue();
+            }
+        }
+        return postfixString;
+    }
+
+    // Method to evaluate value of a postfix expression
+    public static int evaluatePostfix(String postfixExpr){// evaluates the post fix expression
+        Stack s = new Stack();//inizialize the stack
+        int result = 0;
+        String operand = "";
+
+
+        for(int i = 0; i<postfixExpr.length();i++){
+            if(Character.isDigit(postfixExpr.charAt(i)) == true){ // if the character from the stack is a digit
+
+                operand = operand + postfixExpr.charAt(i);
+                if(Character.isDigit(postfixExpr.charAt(i+1)) == false){
+                    s.push(operand);
+                    operand = "";
+
+                }
+
+            }
+            if(postfixExpr.charAt(i) == '+'){// compute the values with the operands from the stack if there is a operators in the expression
+                int x = Integer.parseInt((String) s.pop()) + Integer.parseInt((String) s.pop());
+                result = result + x ;
+                s.push(String.valueOf(x));
+            }
+            if(postfixExpr.charAt(i) == '-'){
+                int x = Integer.parseInt((String) s.pop()) - Integer.parseInt((String) s.pop());
+                result = result + x ;
+                s.push(String.valueOf(x));
+            }
+            if(postfixExpr.charAt(i) == '*'){
+                int x = Integer.parseInt("" + s.pop()) * Integer.parseInt("" + s.pop());
+                result = result + x ;
+                s.push(String.valueOf(x));
+            }
+            if(postfixExpr.charAt(i) == '/'){
+                int x = Integer.parseInt((String) s.pop()) / Integer.parseInt((String) s.pop());
+                result = result + x ;
+                s.push(String.valueOf(x));
+            }
+
+        }
+
+        return result;
+    }
+
+
+ }
