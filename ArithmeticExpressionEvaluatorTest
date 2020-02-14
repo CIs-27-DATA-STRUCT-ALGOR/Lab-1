@@ -1,0 +1,15 @@
+import java.util.Scanner;
+
+public class ArithmeticExpressionEvaluatorTest
+{
+    public static void main(String[] args) {
+        ArithmetricExpressionEvaluator expressionEvaluator = new ArithmetricExpressionEvaluator();
+        String expression="((1 + 2) * ((3 - 4) + 12))";
+        System.out.println("Infix to Postfix: " + expression+"\n");
+        System.out.println("Output: " + expressionEvaluator.infixToPostfix(expression)+"\n");
+        System.out.println("EvaluatePostfixExpression: " + expression+"\n");
+        System.out.println("Output: " + expressionEvaluator.evaluatePostfix(expressionEvaluator.infixToPostfix(expression))+"\n");
+
+
+    }
+}
