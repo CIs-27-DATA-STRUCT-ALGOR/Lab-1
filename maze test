@@ -1,0 +1,18 @@
+
+public class MazeTest
+{
+    public static void main(String[] args) {
+        int x = 10;
+        int y = 10;
+
+
+
+
+
+        Maze maze = new Maze(x, y);
+        maze.random();
+
+
+    }
+
+}
