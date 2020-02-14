@@ -1,27 +1,112 @@
+
 public class DequeTest
 {
     public static void main(String[] args) {
 
-        Deque<String> dll = new Deque();
+        Deque<Integer> deque=new Deque<>();
 
 
-        dll.Insert_at_the_end("Arkan");
+        System.out.println("\n");
+        deque.insertAtBeginning(56);
+        System.out.println("Insert at the beginning : 56");
+        deque.print_All_Node(deque.head);
+
+        System.out.println("\n");
+        deque.insertAtBeginning(123);
+        System.out.println("Insert at the beginning : 123");
+        deque.print_All_Node(deque.head);
+
+        System.out.println("\n");
+        deque.insertAtBeginning(546);
+        System.out.println("Insert at the beginning : 546");
+        deque.print_All_Node(deque.head);
+
+        System.out.println("\n");
+        deque.insertAtBeginning(16);
+        System.out.println("Insert at the beginning : 16");
+        deque.print_All_Node(deque.head);
+
+        System.out.println("\n");
+        deque.insertAtBeginning(76);
+        System.out.println("Insert at the beginning : 76");
+        deque.print_All_Node(deque.head);
+
+        System.out.println("\n");
+        deque.insertAtBeginning(91);
+        System.out.println("Insert at the beginning : 91");
+        deque.print_All_Node(deque.head);
+
+        System.out.println("\n");
+        deque.insertAtBeginning(71);
+        System.out.println("Insert at the beginning : 71");
+        deque.print_All_Node(deque.head);
+
+        System.out.println("\n");
+        deque.insertAtEnd(45);
+        System.out.println("Insert at the End : 45");
+        deque.print_All_Node(deque.head);
+
+        System.out.println("\n");
+        deque.InsertAfter(12,deque.head.next);
+        System.out.println("Insert After : head.next");
+        deque.print_All_Node(deque.head);
+
+        System.out.println("\n");
+        deque.removeFromBeginning();
+        System.out.println("Remove From the Beginning");
+        deque.print_All_Node(deque.head);
+
+        System.out.println("\n");
+        deque.removeFromEnd();
+        System.out.println("Remove From End");
+        deque.print_All_Node(deque.head);
+
+        System.out.println("\n");
+        deque.moveToFront(deque.head.next);
+        System.out.println("Move to Front : head.next");
+        deque.print_All_Node(deque.head);
+
+        System.out.println("\n");
+        deque.insertBefore(98,deque.head.next);
+        System.out.println("Insert Before : head.next");
+        deque.print_All_Node(deque.head);
+
+        System.out.println("\n");
+        deque.remove(deque.head.next);
+        System.out.println("Remove : head.next");
+        deque.print_All_Node(deque.head);
 
 
-        dll.Insert_at_the_beginning("Messi");
 
 
-        dll.Insert_at_the_beginning("Aron");
 
-        dll.Insert_at_the_end("Kante");
-        dll.Insert_at_the_end("Morni");
-        dll.InsertBefore(dll.head.next, "Abel");
 
-        dll.InsertAfter(dll.head.next, "jhon");
-        dll.Remove_at_the_beginning();
-        dll.Remove_at_the_end();
 
-        dll.print_All_Node(dll.head);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     }
